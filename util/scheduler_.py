@@ -20,6 +20,7 @@ def addOrUpdateScheduler(scheduler_name: str, timer: str, func: Any, args=None):
                       id=scheduler_name,
                       timezone='Asia/Shanghai'
                       )
+    scheduler.start()
 
 
 async def schedulerWeatherTask(conversation: Union[Contact, Room], timer: str, args: list):
@@ -32,3 +33,4 @@ async def schedulerWeatherTask(conversation: Union[Contact, Room], timer: str, a
     """
     id = conversation.contact_id if isinstance(conversation, Contact) else conversation.room_id
     addOrUpdateScheduler(f"Push-Weather-{id}", func=sendWeather, timer=timer, args=args)
+    await args[0].say("设置成功!")

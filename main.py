@@ -20,8 +20,6 @@ async def run():
 
     bot.use(wechat_ai).use(WechatyWeatherPoster())
     await bot.start()
-    """ 启动scheduler """
-    await scheduler.start_in_background()
 
 
 if __name__ == '__main__':

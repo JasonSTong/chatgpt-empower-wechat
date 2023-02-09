@@ -10,23 +10,6 @@ import openai
 from config.config import collection_get, get_env
 from config.generation_config import generation_config
 
-"""
-    本地环境
-    os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = '127.0.0.1:18181'
-"""
-
-"""
-    家庭nas环境
-os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = '192.168.31.137:9001'
-"""
-
-"""
-    外部环境
-"""
-os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = ''  # ip+port
-
-os.environ['WECHATY_PUPPET_SERVICE_TOKEN'] = ''  # uuid
-
 """ 初始化日志 """
 logging.basicConfig()
 logging.getLogger('apscheduler').setLevel('DEBUG')
@@ -53,7 +36,7 @@ redis = Redis.from_url(
 persistence = PicklePersistence(filepath='arbitrarycallbackdatabot')
 tg_application = (
     Application.builder()
-        .token(collection_get('TELEGRAM_' + env, 'TOKEN'))
+        .token(collection_get('TELEGRAM_'+ env, 'TOKEN'))
         .persistence(persistence)
         .arbitrary_callback_data(True)
         .proxy_url('http://127.0.0.1:58591')

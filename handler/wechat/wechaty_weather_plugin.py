@@ -42,5 +42,8 @@ class WechatyWeatherPoster(WechatyPlugin):
                 print("时间:", time_dict)
                 print("城市:", city)
                 await schedulerWeatherTask(conversation=conversation, timer=time_dict, args=[conversation, city])
-            except:
-                await conversation.say("初始化失败,请稍后再试!")
+            except Exception as e:
+                if "already" not in e.__str__():
+                    await conversation.say("初始化失败,请稍后再试!")
+                else:
+                    await conversation.say("设置成功!")
