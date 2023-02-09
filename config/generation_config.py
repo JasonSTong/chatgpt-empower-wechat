@@ -13,7 +13,7 @@ with open(config_path, 'r') as load_f:
 
 config["env"] = {'env': 'LOCAL'}
 """ 本地redis配置 """
-config["REDIS_LOCAL"] = {'URL': 'redis://localhost:6379/0',
+config["REDIS_LOCAL"] = {'URL': config_dict.get('redis_url'),
                          'DECODE': True,
                          'ENCODING': 'utf-8',
                          'MAX_COLLECTIONS': 10,

@@ -3,5 +3,6 @@
   "wechaty_token": "",
   "wechaty_path": "",
   "telegram_bot_token": "",
-  "qweather_api_key": ""
+  "qweather_api_key": "",
+  "redis_url": "redis://localhost:6379/0"
 }

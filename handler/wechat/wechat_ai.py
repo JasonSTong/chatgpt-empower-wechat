@@ -30,11 +30,11 @@ class WechatAI(WechatyPlugin):
         conversation: Union[
             Room, Contact] = msg.talker() if msg.room() is None else msg.room()
         # 处理对话
-        try:
-            if is_self is not True and (
-                    (is_room is not None and is_mention_bot and "#" not in msg.text()) or
-                    (is_room is None and "#" not in msg.text())
-            ):
+        if is_self is not True and (
+                (is_room is not None and is_mention_bot and "#" not in msg.text()) or
+                (is_room is None and "#" not in msg.text())
+        ):
+            try:
                 # 上下文存储在redis
                 chat_id = ''
                 if is_room is not None:
@@ -60,8 +60,9 @@ class WechatAI(WechatyPlugin):
                         response_text, msg.room(), mention_user, conversation
                     )
                     i = i + 1
-        except:
-            pass
+            except:
+                pass
+
         # 处理生成图片
         if is_self is not True and ((is_room is not None and is_mention_bot and "#生成图片" in msg.text()) or (
                 is_room is None and "#生成图片" in msg.text())):
