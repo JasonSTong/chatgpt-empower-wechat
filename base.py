@@ -11,7 +11,13 @@ from config.config import collection_get, get_env
 from config.generation_config import generation_config
 
 """ 初始化日志 """
-logging.basicConfig()
+logging.basicConfig(level=logging.ERROR,  # 控制台打印的日志级别
+                    filename='log.log',
+                    filemode='a',  ##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
+                    # a是追加模式，默认如果不写的话，就是追加模式
+                    format='%(levelname)s-%(asctime)s-%(message)s [%(filename)s-%(funcName)s-%(lineno)d]', datefmt='%m/%d/%Y %I:%M:%S %p'
+                    # 日志格式
+                    )
 logging.getLogger('apscheduler').setLevel('DEBUG')
 
 """ 初始化scheduler """
@@ -36,7 +42,7 @@ redis = Redis.from_url(
 persistence = PicklePersistence(filepath='arbitrarycallbackdatabot')
 tg_application = (
     Application.builder()
-        .token(collection_get('TELEGRAM_'+ env, 'TOKEN'))
+        .token(collection_get('TELEGRAM_' + env, 'TOKEN'))
         .persistence(persistence)
         .arbitrary_callback_data(True)
         .proxy_url('http://127.0.0.1:58591')

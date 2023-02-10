@@ -26,6 +26,8 @@ class WechatAI(WechatyPlugin):
         is_room = msg.room()
         if "HandOffMaster" in msg.text():
             return
+        if "weixin://dl/feedback?from=" in msg.text():
+            return
         is_self = msg.talker().is_self()
         conversation: Union[
             Room, Contact] = msg.talker() if msg.room() is None else msg.room()
@@ -41,7 +43,6 @@ class WechatAI(WechatyPlugin):
                     chat_id = chat_id + is_room.room_id
                 chat_id = chat_id + msg.talker().contact_id
                 context_str = redis.get(chat_id) or ''
-
                 context_str = context_str + f"(You:{msg.text()})"
                 response_list = text_ai(context_str)
                 i: int = 1
@@ -60,8 +61,10 @@ class WechatAI(WechatyPlugin):
                         response_text, msg.room(), mention_user, conversation
                     )
                     i = i + 1
-            except:
-                pass
+                return
+            except Exception as e:
+                logging.error(e)
+                return
 
         # 处理生成图片
         if is_self is not True and ((is_room is not None and is_mention_bot and "#生成图片" in msg.text()) or (
@@ -75,6 +78,43 @@ class WechatAI(WechatyPlugin):
             else:
                 img_file_box = FileBox.from_url(img_url, name=generate_text + '.jpeg')
                 await mention_and_say(img_file_box, msg.room(), mention_user, conversation)
+            return
+
+        # 处理生成周报
+        if is_self is not True and ((is_room is not None and is_mention_bot and "#生成日报" in msg.text()) or
+                                    (is_room is None and "#生成日报" in msg.text())
+        ):
+            generate_text = msg.text().split('#生成日报')[1]
+            weekly_list = text_ai(f"请帮我把以下的工作内容填充为一篇完整的日报,以分点叙述的形式输出.'{generate_text}'")
+            if len(weekly_list) < 1:
+                await mention_and_say("生成日报失败", msg.room(), mention_user, conversation)
+            else:
+                await create_ai_text(weekly_list, msg.room(), mention_user, conversation)
+
+        # 处理生成周报
+        if is_self is not True and ((is_room is not None and is_mention_bot and "#生成周报" in msg.text()) or
+                                    (is_room is None and "#生成周报" in msg.text())
+        ):
+            generate_text = msg.text().split('#生成周报')[1]
+            weekly_list = text_ai(f"请帮我把以下的工作内容填充为一篇完整的周报,以分点叙述的形式输出.'{generate_text}'")
+            if len(weekly_list) < 1:
+                await mention_and_say("生成周报", msg.room(), mention_user, conversation)
+            else:
+                await create_ai_text(weekly_list, msg.room(), mention_user, conversation)
+
+
+async def create_ai_text(response_list: list, room_, mention_user, conversation: Union[Room, Contact]):
+    i: int = 1
+    for response in response_list:
+        size = len(response_list)
+        if size == 1:
+            await mention_and_say(response, room_, mention_user, conversation)
+            return
+        await mention_and_say(
+            f"第" + str(i) + "页/总计" + str(size) + "页\n"
+                                                 "================\n" +
+            response, room_, mention_user, conversation)
+        i = i + 1
 
 
 async def mention_and_say(response_obj, room_, mention_users: List[str], conversion: Union[Room, Contact]):
