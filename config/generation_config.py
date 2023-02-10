@@ -33,7 +33,7 @@ config["QWEATHER_LOCAL"] = {'KEY': config_dict.get('qweather_api_key') or '',  #
 
 
 def generation_config():
-    os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = config_dict.get('wechaty_path') or ''  # ip+port
+    os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = config_dict.get('wechaty_url') or ''  # ip+port
     os.environ['WECHATY_PUPPET_SERVICE_TOKEN'] = config_dict.get('wechaty_token') or ''  # uuid
     with open('cfg.ini', 'w') as configfile:
         config.write(configfile)

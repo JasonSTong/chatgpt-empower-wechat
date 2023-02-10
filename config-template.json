@@ -1,7 +1,7 @@
 {
   "open_ai_api_key": "",
   "wechaty_token": "",
-  "wechaty_path": "",
+  "wechaty_url": "",
   "telegram_bot_token": "",
   "qweather_api_key": "",
   "redis_url": "redis://localhost:6379/0"
