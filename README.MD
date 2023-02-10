@@ -1,4 +1,4 @@
-# <center>Chatgpt-empower-wechat🤖</center>
+# chatgpt-empower-wechat
 
 > 该项目使用chatgpt、wechaty-padlocal，可以快速搭建属于自己的微信机器人。
 
