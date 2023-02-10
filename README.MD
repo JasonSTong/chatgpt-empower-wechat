@@ -1,4 +1,4 @@
-# <center>Chatgpt-empower-wechat🤖
+# chatgpt-empower-wechat
 
 > 该项目使用chatgpt、wechaty-padlocal，可以快速搭建属于自己的微信机器人。
 
@@ -37,7 +37,8 @@
 
 ### 环境
 
-1. 拉取wechaty docker镜像，配置并启动。
+1. 安装python3.9
+2. 拉取wechaty docker镜像，配置并启动。
 
    ```bash
    # 需要修改WECHATY_PUPPET_PADLOCAL_TOKEN和WECHATY_TOKEN
@@ -60,13 +61,13 @@
      wechaty/wechaty:0.65
    ```
 
-2. 拉取chatgpt-empower-wechat 代码。
+3. 拉取chatgpt-empower-wechat 代码。
 
    ```bash
    git clone git@github.com:JasonSTong/chatgpt-empower-wechat.git
    ```
 
-3. 安装并配置项目。
+4. 安装并配置项目。
 
    ```bash
    cd chatgpt-empower-wechat
@@ -82,4 +83,6 @@
      "redis_url": "redis://localhost:6379/0" # (必填) 用于上下文管理
    }
    ```
-
+### 运行
+- 测试运行 `python3.9 main.py`
+- 后台运行 `nohup python3.9 main.py >/dev/null 2>&1 &`
