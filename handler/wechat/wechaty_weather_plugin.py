@@ -30,7 +30,7 @@ class WechatyWeatherPoster(WechatyPlugin):
         if "#" in text and "天气" in text and "推送" in text:
             try:
                 response_text = text_ai(
-                    '解析这句话中的时间地点，格式化时间为cron形式以"minute, hour, day of month, month, day of week"排序时间参数,并且忽略秒，以["时间","地点"],其中引号需要变为双引号返回给我。' + f"'{text}'")
+                    '解析这句话中的时间地点，格式化时间为cron形式以"minute, hour, day of month, month, day of week"排序时间参数,并且忽略秒，以["时间","地点"],其中引号需要变为双引号返回给我。例如:["0 18 * * *","武汉"]' + f"'{text}'")
                 # index0:dict 时间,index1:地点
                 print(response_text)
                 time_corn_and_city: list = json.loads(

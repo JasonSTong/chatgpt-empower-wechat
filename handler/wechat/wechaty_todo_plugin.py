@@ -25,8 +25,9 @@ class WechatyTodoPoster(WechatyPlugin):
         if "#" in text and "提醒我" in text:
             try:
                 response_text = text_ai(
-                    '解析这句话中的时间和提醒事件，格式化时间为cron形式以"[minute, hour, day of month, month, day of week]"排序时间参数,并且忽略秒，以["时间","事件"],其中引号需要变为双引号返回给我。' + f"'{text}'")
+                    '解析这句话中的时间和提醒事件，格式化时间为cron形式以"[minute, hour, day of month, month, day of week]"排序时间参数,并且忽略秒，以["时间","事件"],其中引号需要变为双引号返回给我。例如:["0 18 * * *","提醒我下班打卡"]' + f"'{text}'")
                 # index0:dict 时间,index1:地点
+                print(response_text)
                 time_corn_and_todo: list = json.loads(
                     response_text[0].replace("\n", "").replace("答案", "").replace("answer", "").replace("=", "").replace(
                         "#：", "").replace("#:", "")
