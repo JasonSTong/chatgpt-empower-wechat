@@ -31,6 +31,10 @@ class WechatAI(WechatyPlugin):
         is_self = msg.talker().is_self()
         conversation: Union[
             Room, Contact] = msg.talker() if msg.room() is None else msg.room()
+        # 处理疯狂处理微信团队消息
+        if conversation.get_id().__eq__('weixin'):
+            print("是微信团队的消息")
+            return
         # 处理对话
         if is_self is not True and (
                 (is_room is not None and is_mention_bot and "#" not in msg.text()) or

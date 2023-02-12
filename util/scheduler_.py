@@ -4,7 +4,7 @@ from apscheduler.triggers.cron import CronTrigger
 from wechaty import Contact, Room
 
 from base import scheduler
-from handler.scheduler_h.schedulers_handler import sendWeather
+from handler.scheduler_h.schedulers_handler import sendWeather, sendTodo
 
 
 def addOrUpdateScheduler(scheduler_name: str, timer: str, func: Any, args=None):
@@ -23,6 +23,13 @@ def addOrUpdateScheduler(scheduler_name: str, timer: str, func: Any, args=None):
     scheduler.start()
 
 
+async def removeTask(scheduler_name: str,conversation: Union[Contact, Room]):
+    s = scheduler.get_job(scheduler_name)
+    if s is not None:
+        scheduler.remove_job(scheduler_name)
+        await conversation.say("删除成功")
+
+
 async def schedulerWeatherTask(conversation: Union[Contact, Room], timer: str, args: list):
     """
     定时推送天气
@@ -33,4 +40,10 @@ async def schedulerWeatherTask(conversation: Union[Contact, Room], timer: str, a
     """
     id = conversation.contact_id if isinstance(conversation, Contact) else conversation.room_id
     addOrUpdateScheduler(f"Push-Weather-{id}", func=sendWeather, timer=timer, args=args)
+    await args[0].say("设置成功!")
+
+
+async def schedulerTodoTask(conversation: Union[Contact, Room], timer: str, args: list):
+    id = conversation.contact_id if isinstance(conversation, Contact) else conversation.room_id
+    addOrUpdateScheduler(f"Push-Todo-{id}-{args[1]}", func=sendTodo, timer=timer, args=args)
     await args[0].say("设置成功!")
