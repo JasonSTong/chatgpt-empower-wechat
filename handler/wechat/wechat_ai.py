@@ -41,7 +41,7 @@ class WechatAI(WechatyPlugin):
         ):
             try:
                 # 上下文存储在redis
-                chat_id = ''
+                chat_id = 'context'
                 if is_room is not None:
                     chat_id = chat_id + is_room.room_id
                 chat_id = chat_id + msg.talker().contact_id
