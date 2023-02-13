@@ -24,15 +24,15 @@ class WeatherUtil:
             return weather
         return None
 
-    def createWeatherStr(self, city_name: str, weather: dict, day: int):
+    def createWeatherStr(self, city_name: str, weather: dict, day: str):
         weatherStr = f""
-        if day == 0:
+        if day == '今天':
             weatherStr = "今日 "
             weather = weather[0]
-        elif day == 1:
+        elif day == '明天':
             weatherStr = "明天 "
             weather = weather[1]
-        elif day == 2:
+        elif day == '后天':
             weatherStr = "后天 "
             weather = weather[2]
         if city_name is not None:
@@ -43,7 +43,7 @@ class WeatherUtil:
                                       f" 🌪 最高风速{weather['windScaleDay']}级"
         return weatherStr
 
-    def getWeatherNowStr(self, city_name: str, day: int):
+    def getWeatherNowStr(self, city_name: str, day: str):
         location_id = self.getLocationId(city_name)
         weather = self.getWeatherNow(location_id)
 
