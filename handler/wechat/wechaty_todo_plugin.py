@@ -47,7 +47,6 @@ class WechatyTodoPoster(WechatyPlugin):
                 index_msg = msg.text().split('#删除任务')[1].replace(" ", "")
             else:
                 index_msg= msg.text().split('#删除')[1].replace(" ", "")
-
             await removeTask(conv_id, int(index_msg),conversation)
         if "#" in text and ("推送列表" in text or "任务列表" in text):
             task_str = "\n".join(getTaskList(conv_id))

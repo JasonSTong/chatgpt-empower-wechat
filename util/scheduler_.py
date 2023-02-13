@@ -35,7 +35,10 @@ def getTaskList(name: str) -> list:
         task_dict = json.loads(task_str)
         task_name_list.append(f"{i}.{task_dict['task_name']}")
         i = i + 1
-    task_name_list.append("如果删除,请从大到小删除")
+    if len(task_name_list) < 1:
+        task_name_list.append("暂时没有任务,请添加任务.\n例:#每天8点30推送当日武汉天气")
+    else:
+        task_name_list.append("如果删除,请从大到小删除")
     return task_name_list
 
 
