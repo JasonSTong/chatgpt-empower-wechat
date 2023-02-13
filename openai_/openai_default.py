@@ -37,5 +37,4 @@ def text_ai(prompt: str):
 
 def img_ai(prompt):
     response_text = img_ai_api().create(prompt=prompt, size='1024x1024', n=1, response_format='url')
-    print(response_text)
     return response_text.get('data')[0].url

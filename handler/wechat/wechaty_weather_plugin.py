@@ -31,7 +31,7 @@ class WechatyWeatherPoster(WechatyPlugin):
         if "#" in text and "天气" in text and "推送" in text:
             try:
                 response_text = text_ai(
-                    f'解析这句话中的时间地点日期'+text+'，格式化时间为cron形式以"minute, hour, day of month, month, day of week"排序时间参数,并且忽略秒，如果这句话里有今天，明天，后天作为日期提取出来放在第三个参数中，如果没有默认为今天。以["时间","地点","日期"],其中引号需要变为双引号返回给我。例如:["0 18 * * *","武汉","今天"] ,[None,"武汉","今天"]')
+                    f'解析这句话中的时间地点日期'+text+'，如果其中有时间则格式化时间为cron形式以"minute, hour, day of month, month, day of week"排序时间参数并且忽略秒，如果这句话里有今天，明天，后天作为日期提取出来放在第三个参数中，如果没有默认为今天。以["时间","地点","日期"],其中引号需要变为双引号返回给我。例如:["0 18 * * *","武汉","今天"] ,[None,"武汉","今天"]')
                 # index0:dict 时间,index1:地点 index2:日期
                 time_corn_and_city: list = json.loads(
                     response_text[0].replace("\n", "").replace("答案", "").replace("answer", "").replace("=", "").replace(
@@ -40,7 +40,7 @@ class WechatyWeatherPoster(WechatyPlugin):
                 time_dict: str = time_corn_and_city[0]
                 city = time_corn_and_city[1]
                 day = time_corn_and_city[2]
-                if len(time_dict) > 2:
+                if time_dict.__eq__('None'):
                     await sendWeather(conversation, city,day)
                     return
                 await schedulerWeatherTask(conversation=conversation, timer=time_dict, args=[conversation, city,day])

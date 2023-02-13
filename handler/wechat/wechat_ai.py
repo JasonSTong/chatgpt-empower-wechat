@@ -72,8 +72,6 @@ class WechatAI(WechatyPlugin):
         # 处理生成图片
         if is_self is not True and ((is_room is not None and is_mention_bot and "#生成图片" in msg.text()) or (
                 is_room is None and "#生成图片" in msg.text())):
-            print("需要生成的信息:" + msg.text())
-
             generate_text = msg.text().split('#生成图片')[1]
             img_url = img_ai(generate_text)
             if len(img_url) < 2:

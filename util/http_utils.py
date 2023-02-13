@@ -16,7 +16,6 @@ class WeatherUtil:
 
     def getWeatherNow(self, location_id: int):
         response = requests.get(self.weather_path, params={'location': location_id, 'key': self.key})
-        print(response.text)
         if response.status_code == 200:
             data = response.text
             jsondata = json.loads(data)
