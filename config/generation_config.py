@@ -20,7 +20,7 @@ config["REDIS_LOCAL"] = {'URL': config_dict.get('redis_url'),
                          'SOCKET_TIMEOUT': 5,
                          'SOCKET_CONNECT_TIMEOUT': 5
                          }
-config["OPENAI_LOCAL"] = {'KEY': config_dict.get('open_ai_api_key') or '',  # api-key
+config["OPENAI_LOCAL"] = {'KEY': config_dict.get('open_ai_api_key') or [],  # api-key
                           'ORGANIZATION': ''  # api-user
                           }
 config["TELEGRAM_LOCAL"] = {'TOKEN': config_dict.get('telegram_bot_token') or '',  # bot-token

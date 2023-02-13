@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import random
 
 from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -15,7 +17,8 @@ logging.basicConfig(level=logging.DEBUG,  # 控制台打印的日志级别
                     filename='log.log',
                     filemode='a',  ##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
                     # a是追加模式，默认如果不写的话，就是追加模式
-                    format='%(levelname)s-%(asctime)s-%(message)s [%(filename)s-%(funcName)s-%(lineno)d]', datefmt='%m/%d/%Y %I:%M:%S %p'
+                    format='%(levelname)s-%(asctime)s-%(message)s [%(filename)s-%(funcName)s-%(lineno)d]',
+                    datefmt='%m/%d/%Y %I:%M:%S %p'
                     # 日志格式
                     )
 logging.getLogger('apscheduler').setLevel('DEBUG')
@@ -39,25 +42,24 @@ redis = Redis.from_url(
 )
 
 """ 初始化tgBOT """
-persistence = PicklePersistence(filepath='arbitrarycallbackdatabot')
-tg_application = (
-    Application.builder()
-        .token(collection_get('TELEGRAM_' + env, 'TOKEN'))
-        .persistence(persistence)
-        .arbitrary_callback_data(True)
-        .proxy_url('http://127.0.0.1:58591')
-        .build()
-)
-""" 初始化tgBOT命令组 """
-# tg_application.add_handler(CommandHandler('bind', bind_wechat))
+if len(collection_get('TELEGRAM_' + env, 'TOKEN')) > 1:
+    persistence = PicklePersistence(filepath='arbitrarycallbackdatabot')
+    tg_application = (
+        Application.builder()
+            .token(collection_get('TELEGRAM_' + env, 'TOKEN'))
+            .persistence(persistence)
+            .arbitrary_callback_data(True)
+            .proxy_url('http://127.0.0.1:58591')
+            .build()
+    )
+    """ 初始化tgBOT命令组 """
+    # tg_application.add_handler(CommandHandler('bind', bind_wechat))
 
 """ 初始化OpenAi """
 # 获取OpenAIkey
-openai_key = collection_get('OPENAI_' + env, 'key')
+openai_keys = collection_get('OPENAI_' + env, 'key')
+openai_keys = openai_keys.strip('[')
+openai_keys = openai_keys.strip(']')
+openai_keys = openai_keys.replace("'", "")
+openai_key_list = openai_keys.split(',')
 openai_org = collection_get('OPENAI_' + env, 'ORGANIZATION')
-openai.api_key = openai_key
-openai.organization = openai_org
-
-# 初始化openAI调用
-completion_ai_api = openai.Completion
-image_ai_api = openai.Image

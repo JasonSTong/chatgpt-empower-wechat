@@ -41,9 +41,9 @@
 2. 拉取wechaty docker镜像，配置并启动。
 
    ```bash
-   # 需要修改WECHATY_PUPPET_PADLOCAL_TOKEN和WECHATY_TOKEN
-   export WECHATY_PUPPET_PADLOCAL_TOKEN="Wechaty-padlocal-token"
-   export WECHATY_TOKEN="UUID"
+   # 需要修改WECHATY_PUPPET_PADLOCAL_TOKEN(准备中的第二条)和WECHATY_TOKEN(准备中的第三条)
+   export WECHATY_PUPPET_PADLOCAL_TOKEN="{Wechaty-padlocal-token}"
+   export WECHATY_TOKEN="{UUID}"
    
    export WECHATY_LOG="verbose"
    export WECHATY_PUPPET="wechaty-puppet-padlocal"
@@ -71,12 +71,13 @@
 
    ```bash
    cd chatgpt-empower-wechat
+   cp config-tempalte.json config.json
    vim config.json
    ```
    ```json
    {
      "open_ai_api_key": "", # (必填) 准备中的第一个,OpenAiApiKey
-     "wechaty_token": "",   # (必填) 准备中的第三个 uuid
+     "wechaty_token": [],   # (必填) 准备中的第三个 uuid
      "wechaty_url": "",    # (必填) 发布wechaty-docker的ip+port
      "telegram_bot_token": "", # (可选)
      "qweather_api_key": "", # (可选 没有配置的话无法使用天气推送)
