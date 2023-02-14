@@ -73,6 +73,7 @@
    cd chatgpt-empower-wechat
    cp config-tempalte.json config.json
    vim config.json
+   pip3 install -r requirements.txt
    ```
    ```json
    {
