@@ -1,5 +1,5 @@
 {
-  "open_ai_api_key": "",
+  "open_ai_api_key": [""],
   "wechaty_token": "",
   "wechaty_url": "",
   "telegram_bot_token": "",
