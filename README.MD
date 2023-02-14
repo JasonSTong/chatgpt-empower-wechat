@@ -76,7 +76,7 @@
    ```
    ```json
    {
-     "open_ai_api_key": "", # (必填) 准备中的第一个,OpenAiApiKey
+     "open_ai_api_key": [""], # (必填) 准备中的第一个,OpenAiApiKey
      "wechaty_token": [],   # (必填) 准备中的第三个 uuid
      "wechaty_url": "",    # (必填) 发布wechaty-docker的ip+port
      "telegram_bot_token": "", # (可选)
