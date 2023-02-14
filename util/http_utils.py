@@ -9,8 +9,8 @@ from config.config import get_env, collection_get
 class WeatherUtil:
     env = get_env()
     weather_config_key = 'QWEATHER_' + env
-    location_path = collection_get(weather_config_key,'LOCATION-PATH')
-    weather_path = collection_get(weather_config_key,'WEATHER-PATH')
+    location_path = collection_get(weather_config_key,'LOCATION_PATH')
+    weather_path = collection_get(weather_config_key,'WEATHER_PATH')
     key = collection_get(weather_config_key,'KEY')
 
 

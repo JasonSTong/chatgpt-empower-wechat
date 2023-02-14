@@ -63,3 +63,10 @@ openai_keys = openai_keys.strip(']')
 openai_keys = openai_keys.replace("'", "")
 openai_key_list = openai_keys.split(',')
 openai_org = collection_get('OPENAI_' + env, 'ORGANIZATION')
+
+""" 初始化管理员列表 """
+root_user_uuids = collection_get('ROOT_' + env, 'ROOT_USER_UUID')
+root_user_uuids = root_user_uuids.strip('[')
+root_user_uuids = root_user_uuids.strip(']')
+root_user_uuids = root_user_uuids.replace("'", "")
+root_user_uuid_list = root_user_uuids.split(',')

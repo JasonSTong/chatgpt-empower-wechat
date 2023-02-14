@@ -27,9 +27,10 @@ config["TELEGRAM_LOCAL"] = {'TOKEN': config_dict.get('telegram_bot_token') or ''
                             }
 
 config["QWEATHER_LOCAL"] = {'KEY': config_dict.get('qweather_api_key') or '',  # 和风天气api-Key
-                            'LOCATION-PATH': 'https://geoapi.qweather.com/v2/city/lookup',
-                            'WEATHER-PATH': 'https://devapi.qweather.com/v7/weather/3d'
+                            'LOCATION_PATH': 'https://geoapi.qweather.com/v2/city/lookup',
+                            'WEATHER_PATH': 'https://devapi.qweather.com/v7/weather/3d'
                             }
+config["ROOT_LOCAL"] = {"ROOT_USER_UUID": config_dict.get('root_user_uuid') or [] }
 
 
 def generation_config():

@@ -4,5 +4,6 @@
   "wechaty_url": "",
   "telegram_bot_token": "",
   "qweather_api_key": "",
-  "redis_url": "redis://localhost:6379/0"
+  "redis_url": "redis://localhost:6379/0",
+  "root_user_uuid": [""]
 }

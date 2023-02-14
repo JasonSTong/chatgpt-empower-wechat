@@ -1,3 +1,4 @@
+import json
 import logging
 import random
 from typing import Union, List
@@ -34,18 +35,31 @@ class WechatAI(WechatyPlugin):
         # 处理疯狂处理微信团队消息
         if is_room is None and conversation.get_id().__eq__('weixin'):
             return
+        # 处理黑名单
+        name = msg.talker().name
+        black_list = redis.lrange("black_list", 0, -1)
+        if json.dumps({"contact_name":name,"contact_id":msg.talker().contact_id}) in black_list:
+            await mention_and_say("当前账号封禁中,请联系管理员.",is_room,mention_user,conversation)
+            return
+        # 处理受限名单
+        restrict_list = redis.lrange("restrict_list",0,-1)
+
+        # 上下文存储在redis
+        chat_id = 'context'
+        if is_room is not None:
+            chat_id = chat_id + is_room.room_id
+        chat_id = chat_id + msg.talker().contact_id
+        context_str = redis.get(chat_id) or ''
+        if json.dumps({"contact_name": name, "contact_id": msg.talker().contact_id}) in restrict_list:
+            if len(context_str) > 100:
+                await mention_and_say("当前账号限制中,请稍后再试或请联系管理员.", is_room, mention_user, conversation)
+                return
         # 处理对话
         if is_self is not True and (
                 (is_room is not None and is_mention_bot and "#" not in msg.text()) or
                 (is_room is None and "#" not in msg.text())
         ):
             try:
-                # 上下文存储在redis
-                chat_id = 'context'
-                if is_room is not None:
-                    chat_id = chat_id + is_room.room_id
-                chat_id = chat_id + msg.talker().contact_id
-                context_str = redis.get(chat_id) or ''
                 context_str = context_str + f"(You:{msg.text()})"
                 response_list = text_ai(context_str)
                 i: int = 1
@@ -99,7 +113,7 @@ class WechatAI(WechatyPlugin):
             generate_text = msg.text().split('#生成周报')[1]
             weekly_list = text_ai(f"请帮我把以下的工作内容填充为一篇完整的周报,以分点叙述的形式输出.'{generate_text}'")
             if len(weekly_list) < 1:
-                await mention_and_say("生成周报", msg.room(), mention_user, conversation)
+                await mention_and_say("生成周报失败", msg.room(), mention_user, conversation)
             else:
                 await create_ai_text(weekly_list, msg.room(), mention_user, conversation)
 

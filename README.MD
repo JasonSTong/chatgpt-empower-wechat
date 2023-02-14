@@ -11,6 +11,7 @@
 - [x] 支持定时任务解析，定时推送天气`#`为触发条件需要包含`时间，推送，天气，和地区（不用包含省/市）`（注：试验阶段，需要多次执行命令,需要和风天气API）
 - [x] 生成周/日报
 - [x] 事件提醒
+- [x] 黑名单/限制名单管理
 - [ ] 接入tg机器人，进行双向绑定
 - [ ] 其他功能代开发
 
@@ -25,7 +26,24 @@
    ![weekly](./doc/imgs/weekly.jpg)
 5. 推送每日天气
    ![qweather](./doc/imgs/qweather.png)
-
+6. 黑名单功能
+- 初始化 `#初始化列表`
+   ![init_contact_list](./doc/imgs/init_contact_list.png)
+- 添加黑名单 `#拉黑 + 序号`
+   ![add_black_list_user](./doc/imgs/add_black_list_user.png)
+- 效果 
+   ![black_user](./doc/imgs/black_user.png)
+- 名单列表 `#黑名单`
+   ![black_list](./doc/imgs/black_list.png)
+- 移除黑名单用户 `#解除黑名单`
+   ![pop_black_list](./doc/imgs/pop_black_list.png)
+7. 限制用户调用
+- 添加限制 `#限制 + 序号`
+- 效果(上下文>100字符后进行限制.2分钟后重置上下文)
+   ![pop_black_list](./doc/imgs/restrict_user.png)
+- 限制列表 `#限制名单`
+   ![pop_black_list](./doc/imgs/restrict_list.png)
+- 解除限制 `#解除限制 + 序号`
 ## 开始
 
 ### 准备
@@ -83,6 +101,7 @@
      "telegram_bot_token": "", # (可选)
      "qweather_api_key": "", # (可选 没有配置的话无法使用天气推送)
      "redis_url": "redis://localhost:6379/0" # (必填) 用于上下文管理
+     "root_user_uuid": [""] # 机器人管理权限账号别名(机器人给管理员的备注,需要唯一)
    }
    ```
 ### 运行
