@@ -21,19 +21,19 @@ class WechatAI(WechatyPlugin):
 
     async def on_message(self, msg: Message) -> None:
         is_mention_bot = await msg.mention_self()
+        is_self = msg.talker().is_self()
+        conversation: Union[
+            Room, Contact] = msg.talker() if msg.room() is None else msg.room()
         mention_user = None
         if is_mention_bot:
             mention_user = [msg.talker().contact_id]
         is_room = msg.room()
+        # 处理疯狂回复微信团队消息
+        if is_room is None and conversation.get_id().__eq__('weixin'):
+            return
         if "HandOffMaster" in msg.text():
             return
         if "weixin://dl/feedback?from=" in msg.text():
-            return
-        is_self = msg.talker().is_self()
-        conversation: Union[
-            Room, Contact] = msg.talker() if msg.room() is None else msg.room()
-        # 处理疯狂处理微信团队消息
-        if is_room is None and conversation.get_id().__eq__('weixin'):
             return
         # 处理黑名单
         name = msg.talker().name
@@ -43,7 +43,6 @@ class WechatAI(WechatyPlugin):
             return
         # 处理受限名单
         restrict_list = redis.lrange("restrict_list",0,-1)
-
         # 上下文存储在redis
         chat_id = 'context'
         if is_room is not None:

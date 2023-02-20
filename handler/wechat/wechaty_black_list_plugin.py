@@ -13,12 +13,17 @@ class WechatyBlackListPlugin(WechatyPlugin):
         super().__init__()
 
     async def on_message(self, msg: Message) -> None:
-        text = msg.text()
         fromContact = msg.talker()
+        text = msg.text()
         room = msg.room()
-        talker_alias = await msg.talker().alias()
         conversation: Union[
             Room, Contact] = fromContact if room is None else room
+        if "#" in text and "root" in text:
+            redis.set("root:" + fromContact.get_id(), 1)
+        is_root = redis.get("root:" + fromContact.get_id())
+        if is_root is None:
+            return
+        talker_alias = await msg.talker().alias()
         if talker_alias not in root_user_uuid_list:
             return
         if "#" in text and "初始化列表" in text:
