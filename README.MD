@@ -27,7 +27,7 @@
 5. 推送每日天气
    ![qweather](./doc/imgs/qweather.png)
 6. 黑名单功能
-- 初始化 `#初始化列表`
+- 初始化 每次启动机器人需要先`#root` 再 `#初始化列表`
    ![init_contact_list](./doc/imgs/init_contact_list.png)
 - 添加黑名单 `#拉黑 + 序号`
    ![add_black_list_user](./doc/imgs/add_black_list_user.png)
