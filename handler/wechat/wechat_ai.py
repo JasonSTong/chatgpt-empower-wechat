@@ -53,6 +53,12 @@ class WechatAI(WechatyPlugin):
             if len(context_str) > 100:
                 await mention_and_say("当前账号限制中,请稍后再试或请联系管理员.", is_room, mention_user, conversation)
                 return
+        if "#清除上下文" in msg.text():
+            if is_room is not None:
+                chat_id = chat_id + is_room.room_id
+            redis.delete(chat_id)
+            await msg.say("清除成功")
+            return
         # 处理对话
         if is_self is not True and (
                 (is_room is not None and is_mention_bot and "#" not in msg.text()) or

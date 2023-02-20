@@ -3,11 +3,12 @@ import random
 
 import openai
 
-from base import openai_key_list, openai_org
+from base import openai_key_list, openai_org, redis
 
 
 def create_openai():
     openai_key = openai_key_list[random.randint(0, len(openai_key_list) - 1)]
+    redis.incr("openai_key_used_count:" + openai_key, 1)
     openai_ = openai
     openai_.api_key = openai_key
     openai_.organization = openai_org
@@ -23,14 +24,13 @@ def img_ai_api():
 
 
 def text_ai(prompt: str):
-    response_text = []
-    flag = True
-    while flag:
+    while True:
+        response_text = []
         response = completion_ai_api().create(engine='text-davinci-003', prompt=prompt, max_tokens=1024,
                                               n=1,
                                               stop=None,
-                                              temperature=0.5)
-        text = response.get('choices')[0].text[:6].replace("\n","")+response.get('choices')[0].text[7:]
+                                              temperature=0, top_p=1)
+        text = response.get('choices')[0].text[:6].replace("\n", "") + response.get('choices')[0].text[7:]
         response_text.append(text)
         if response.get('choices')[0].finish_reason == "stop":
             return response_text
