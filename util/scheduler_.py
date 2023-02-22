@@ -1,4 +1,5 @@
 import json
+import pickle
 from typing import Union, Any
 
 from apscheduler.triggers.cron import CronTrigger
@@ -14,7 +15,7 @@ def addOrUpdateScheduler(scheduler_name: str, conv_id: str, name: str, timer: st
 
     s = scheduler.get_job(scheduler_name)
     if s is not None:
-        redis.lrem(conv_id, 1, json.dumps({"schedule_name": scheduler_name, "task_name": name}))
+        redis.lrem(conv_id, 1, json.dumps({"schedule_name": scheduler_name, "task_name": s.args[len(s.args) - 1]}))
         scheduler.remove_job(scheduler_name)
     scheduler.add_job(func,
                       trigger=trigger,
@@ -63,7 +64,7 @@ async def schedulerWeatherTask(conversation: Union[Contact, Room], timer: str, a
     :return:
     """
     conv_id = conversation.contact_id if isinstance(conversation, Contact) else conversation.room_id
-    name = f"推送{args[1]}-{args[2]}天气"
+    name = args[3]
     addOrUpdateScheduler(f"Push-Weather-{conv_id}-{args[1]}-{args[2]}", conv_id, name, func=sendWeather, timer=timer,
                          args=args)
     await args[0].say("设置成功!")

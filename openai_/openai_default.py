@@ -30,7 +30,7 @@ def text_ai(prompt: str):
                                               n=1,
                                               stop=None,
                                               temperature=0, top_p=1)
-        text = response.get('choices')[0].text[:6].replace("\n", "") + response.get('choices')[0].text[7:]
+        text = response.get('choices')[0].text[:6].replace("\n", "") + response.get('choices')[0].text[6:]
         response_text.append(text)
         if response.get('choices')[0].finish_reason == "stop":
             return response_text

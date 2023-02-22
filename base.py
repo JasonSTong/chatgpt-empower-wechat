@@ -4,6 +4,7 @@ import os
 import random
 
 from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from redis.client import Redis
 from telegram.ext import PicklePersistence, Application, CommandHandler
@@ -22,18 +23,15 @@ logging.basicConfig(level=logging.DEBUG,  # 控制台打印的日志级别
                     # 日志格式
                     )
 logging.getLogger('apscheduler').setLevel('DEBUG')
-
-""" 初始化scheduler """
-scheduler = AsyncIOScheduler(timezone='Asia/Shanghai')
-
 """初始化连接信息配置"""
 generation_config()
 """获取当前环境信息"""
 env = get_env()
+"""配置Redis"""
 redis_config_key = 'REDIS_' + env
-
+redis_url = collection_get(redis_config_key, 'url') or 'redis://localhost:6379/0'
 redis = Redis.from_url(
-    collection_get(redis_config_key, 'url') or 'redis://localhost:6379/0',
+    redis_url,
     decode_responses=collection_get(redis_config_key, 'decode'),
     encoding=collection_get(redis_config_key, 'encoding'),
     max_connections=int(collection_get(redis_config_key, 'MAX_COLLECTIONS')) or 500,
@@ -41,6 +39,14 @@ redis = Redis.from_url(
     socket_connect_timeout=int(collection_get(redis_config_key, 'socket_connect_timeout'))
 )
 
+""" 初化scheduler """
+redis_info_List = redis_url.replace("redis://", "").replace("/0", "").split(":")
+jobstores = {
+    'default': RedisJobStore(host=redis_info_List[0], port=redis_info_List[1])
+}
+scheduler = AsyncIOScheduler(timezone='Asia/Shanghai')
+# scheduler.start()
+# scheduler.resume()
 """ 初始化tgBOT """
 if len(collection_get('TELEGRAM_' + env, 'TOKEN')) > 1:
     persistence = PicklePersistence(filepath='arbitrarycallbackdatabot')
@@ -70,3 +76,8 @@ root_user_uuids = root_user_uuids.strip('[')
 root_user_uuids = root_user_uuids.strip(']')
 root_user_uuids = root_user_uuids.replace("'", "")
 root_user_uuid_list = root_user_uuids.split(',')
+"""初始化帮助信息"""
+base_help_list = []
+base_menu_list = []
+secondary_menu_list = []
+final_menu_list = []

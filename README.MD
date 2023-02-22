@@ -1,9 +1,12 @@
 # chatgpt-empower-wechat
 
+[![Powered by Wechaty](https://img.shields.io/badge/Powered%20By-Wechaty-brightgreen.svg)](https://github.com/Wechaty/wechaty)  [![pypi](https://img.shields.io/badge/py3.9-pass-brightgreen)](https://github.com/JasonSTong/chatgpt-empower-wechat)
 > 该项目使用chatgpt、wechaty-padlocal，可以快速搭建属于自己的微信机器人。
 
 ## 更新
-2023-2-20:支持清除上下文`#清除上下文`
+
+- 2023-2-20:支持清除上下文`#清除上下文`
+- 2023-2-23:支持help提示`#help`
 
 ## 功能
 
@@ -15,6 +18,7 @@
 - [x] 生成周/日报
 - [x] 事件提醒
 - [x] 黑名单/限制名单管理
+- [x] 命令提示
 - [ ] 接入tg机器人，进行双向绑定
 - [ ] 其他功能代开发
 
@@ -30,23 +34,29 @@
 5. 推送每日天气
    ![qweather](./doc/imgs/qweather.png)
 6. 黑名单功能
+
 - 初始化 每次启动机器人需要先`#root` 再 `#初始化列表`
-   ![init_contact_list](./doc/imgs/init_contact_list.png)
+  ![init_contact_list](./doc/imgs/init_contact_list.png)
 - 添加黑名单 `#拉黑 + 序号`
-   ![add_black_list_user](./doc/imgs/add_black_list_user.png)
-- 效果 
-   ![black_user](./doc/imgs/black_user.png)
+  ![add_black_list_user](./doc/imgs/add_black_list_user.png)
+- 效果
+  ![black_user](./doc/imgs/black_user.png)
 - 名单列表 `#黑名单`
-   ![black_list](./doc/imgs/black_list.png)
+  ![black_list](./doc/imgs/black_list.png)
 - 移除黑名单用户 `#解除黑名单`
-   ![pop_black_list](./doc/imgs/pop_black_list.png)
+  ![pop_black_list](./doc/imgs/pop_black_list.png)
+
 7. 限制用户调用
+
 - 添加限制 `#限制 + 序号`
 - 效果(上下文>100字符后进行限制.2分钟后重置上下文)
-   ![pop_black_list](./doc/imgs/restrict_user.png)
+  ![pop_black_list](./doc/imgs/restrict_user.png)
 - 限制列表 `#限制名单`
-   ![pop_black_list](./doc/imgs/restrict_list.png)
+  ![pop_black_list](./doc/imgs/restrict_list.png)
 - 解除限制 `#解除限制 + 序号`
+  8.命令提示
+- ![help_menu](./doc/imgs/help_menu.png)
+
 ## 开始
 
 ### 准备
@@ -107,6 +117,15 @@
      "root_user_uuid": [""] # 机器人管理权限账号别名(机器人给管理员的备注,需要唯一)
    }
    ```
+
 ### 运行
+
 - 测试运行 `python3.9 main.py`
 - 后台运行 `nohup python3.9 main.py >/dev/null 2>&1 &`
+
+### 联系我
+
+|                                                    问题解决(请注明来源)                                                     |                                                      体验机器人(请注明来源)                                                      |
+|:------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------:|
+| <img src="./doc/imgs/wechat.png" alt="image-20230223010558178" title=" style=&quot;zoom:20%;" style="zoom:20%;" /> | <img src="./doc/imgs/wechat_bot.png" alt="image-20230223010558178" title=" style=&quot;zoom:20%;" style="zoom:20%;" /> |
+
