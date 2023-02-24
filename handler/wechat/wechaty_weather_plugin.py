@@ -3,18 +3,22 @@ import logging
 from typing import Union
 
 from wechaty import WechatyPlugin, Wechaty, Message, Contact, Room
+from wechaty_puppet import get_logger
 
 from base import base_help_list
 from handler.scheduler_h.schedulers_handler import sendWeather
 from openai_.openai_default import text_ai
 from util.scheduler_ import schedulerWeatherTask
 
+log = get_logger(__name__)
+
 
 class WechatyWeatherPoster(WechatyPlugin):
 
     def set_helper(self):
         base_help_list.append(
-            {"推送天气消息": [{"1.实时推送": "1.#推送+地区+今/明/后+天气\n不要求顺序\ne.g. #推送明天武汉天气", "2.定时推送": "#时间+推送+地区+今/明/后+天气\n不要求顺序\ne.g. #每天8点20推送武汉天气\n不填今/明/后参数 默认为今天"}]})
+            {"推送天气消息": [{"1.实时推送": "1.#推送+地区+今/明/后+天气\n不要求顺序\ne.g. #推送明天武汉天气",
+                         "2.定时推送": "#时间+推送+地区+今/明/后+天气\n不要求顺序\ne.g. #每天8点20推送武汉天气\n不填今/明/后参数 默认为今天"}]})
 
     def __init__(self):
         super().__init__()
@@ -48,12 +52,12 @@ class WechatyWeatherPoster(WechatyPlugin):
                 day = time_corn_and_city[2]
                 name = time_corn_and_city[3]
                 if time_dict.__eq__('None'):
-                    await sendWeather(conversation, city, day,"")
+                    await sendWeather(conversation, city, day, "")
                     return
                 await schedulerWeatherTask(conversation=conversation, timer=time_dict,
                                            args=[conversation, city, day, name])
             except Exception as e:
-                logging.error(e)
+                log.error(e)
                 if "already" not in e.__str__():
                     await conversation.say("初始化失败,请稍后再试!")
                 else:

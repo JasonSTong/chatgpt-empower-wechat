@@ -3,16 +3,19 @@ import logging
 from typing import Union
 
 from wechaty import WechatyPlugin, Wechaty, Contact, Room, Message
+from wechaty_puppet import get_logger
 
 from base import base_help_list
 from openai_.openai_default import text_ai
 from util.scheduler_ import schedulerTodoTask, removeTask, getTaskList
 
+log = get_logger(__name__)
+
 
 class WechatyTodoPoster(WechatyPlugin):
     def set_helper(self):
         base_help_list.append(
-            {"备忘录": [{"1.添加备忘录": "1.#提醒我+时间+事件\ne.g. #提醒我8点55上班打卡", "2.获取备忘录列表": "#任务列表","3.删除备忘录":"#删除任务+id"}]})
+            {"备忘录": [{"1.添加备忘录": "1.#提醒我+时间+事件\ne.g. #提醒我8点55上班打卡", "2.获取备忘录列表": "#任务列表", "3.删除备忘录": "#删除任务+id"}]})
 
     def __init__(self):
         super().__init__()
@@ -40,7 +43,7 @@ class WechatyTodoPoster(WechatyPlugin):
                 todo = time_corn_and_todo[1]
                 await schedulerTodoTask(conversation=conversation, timer=time_dict, args=[conversation, todo])
             except Exception as e:
-                logging.error(e)
+                log.info(e)
                 if "already" not in e.__str__():
                     await conversation.say("初始化失败,请稍后再试!")
                 else:

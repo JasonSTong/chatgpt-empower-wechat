@@ -4,7 +4,6 @@ import asyncio
 from flask.cli import load_dotenv
 from wechaty import Wechaty,  WechatyOptions
 
-from base import scheduler
 from handler.wechat.wechat_ai import WechatAI
 from handler.wechat.wechaty_black_list_plugin import WechatyBlackListPlugin
 from handler.wechat.wechaty_todo_plugin import WechatyTodoPoster

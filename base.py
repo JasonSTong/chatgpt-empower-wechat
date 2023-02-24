@@ -14,15 +14,8 @@ from config.config import collection_get, get_env
 from config.generation_config import generation_config
 
 """ 初始化日志 """
-logging.basicConfig(level=logging.DEBUG,  # 控制台打印的日志级别
-                    filename='log.log',
-                    filemode='a',  ##模式，有w和a，w就是写模式，每次都会重新写日志，覆盖之前的日志
-                    # a是追加模式，默认如果不写的话，就是追加模式
-                    format='%(levelname)s-%(asctime)s-%(message)s [%(filename)s-%(funcName)s-%(lineno)d]',
-                    datefmt='%m/%d/%Y %I:%M:%S %p'
-                    # 日志格式
-                    )
-logging.getLogger('apscheduler').setLevel('DEBUG')
+os.environ['WECHATY_LOG_FILE'] = 'logs.log'
+os.environ['WECHATY_LOG'] = 'verbose'
 """初始化连接信息配置"""
 generation_config()
 """获取当前环境信息"""

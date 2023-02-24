@@ -2,9 +2,11 @@ import json
 from typing import Union
 
 from wechaty import WechatyPlugin, Wechaty, Contact, Room, Message, Friendship
-from wechaty_puppet import ContactQueryFilter
+from wechaty_puppet import ContactQueryFilter, get_logger
 
 from base import root_user_uuid_list, redis
+
+log = get_logger(__name__)
 
 
 class WechatyBlackListPlugin(WechatyPlugin):
@@ -18,13 +20,13 @@ class WechatyBlackListPlugin(WechatyPlugin):
         room = msg.room()
         conversation: Union[
             Room, Contact] = fromContact if room is None else room
+        talker_alias = await msg.talker().alias()
+        if talker_alias not in root_user_uuid_list:
+            return
         if "#" in text and "root" in text:
             redis.set("root:" + fromContact.get_id(), 1)
         is_root = redis.get("root:" + fromContact.get_id())
         if is_root is None:
-            return
-        talker_alias = await msg.talker().alias()
-        if talker_alias not in root_user_uuid_list:
             return
         if "#" in text and "初始化列表" in text:
             redis.delete("contact_list")
