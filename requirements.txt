@@ -35,7 +35,7 @@ jsonpath==0.82
 lxml==4.9.2
 MarkupSafe==2.1.2
 multidict==6.0.4
-openai==0.26.4
+openai==0.27.0
 opengraph-py3==0.71
 ping3==4.0.4
 polling==0.3.2
