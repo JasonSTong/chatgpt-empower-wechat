@@ -37,5 +37,7 @@ config["ROOT_LOCAL"] = {"ROOT_USER_UUID": config_dict.get('root_user_uuid') or [
 def generation_config():
     os.environ['WECHATY_PUPPET_SERVICE_ENDPOINT'] = config_dict.get('wechaty_url') or ''  # ip+port
     os.environ['WECHATY_PUPPET_SERVICE_TOKEN'] = config_dict.get('wechaty_token') or ''  # uuid
+    os.environ['http_proxy'] = config_dict.get('proxy').get('http')
+    os.environ['https_proxy'] = config_dict.get('proxy').get('https')
     with open('cfg.ini', 'w') as configfile:
         config.write(configfile)
