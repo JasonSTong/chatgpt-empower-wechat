@@ -1,6 +1,9 @@
 import logging
 import random
 
+import asyncio
+from typing import Awaitable
+
 import openai
 from wechaty_puppet import get_logger
 
@@ -54,11 +57,18 @@ def text_ai_v2(message: list) -> set:
                                                    n=1,
                                                    stop=None,
                                                    temperature=0, top_p=1)
-        text = response.get('choices')[0].message.content[:6].replace("\n", "") + response.get('choices')[0].message.content[6:]
+        text = response.get('choices')[0].message.content[:6].replace("\n", "") + response.get('choices')[
+                                                                                      0].message.content[6:]
         log.info(f"uuid:{uuid}\nresponse:{text}")
         response_text.add(text)
         if response.get('choices')[0].finish_reason == "stop":
             return response_text
+
+
+async def async_text_ai_v2(message: list) -> set:
+    loop = asyncio.get_running_loop()
+    result = await loop.run_in_executor(None, text_ai_v2, message)
+    return result
 
 
 def img_ai(prompt):
