@@ -6,5 +6,5 @@
   "qweather_api_key": "",
   "redis_url": "redis://localhost:6379/0",
   "root_user_uuid": [""],
-  "proxy": {"http": "127.0.0.1:7890", "https": "127.0.0.1:7890"}
+  "proxy": {"http": "", "https": ""}
 }
