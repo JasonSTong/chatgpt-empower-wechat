@@ -54,8 +54,7 @@ def text_ai_v2(message: list) -> set:
                                                    n=1,
                                                    stop=None,
                                                    temperature=0, top_p=1)
-        text = response.get('choices')[0].message.content[:6].replace("\n", "") + response.get('choices')[
-                                                                                      0].message.content[6:]
+        text = response.get('choices')[0].message.content[:6].replace("\n", "") + response.get('choices')[0].message.content[6:]
         log.info(f"uuid:{uuid}\nresponse:{text}")
         response_text.add(text)
         if response.get('choices')[0].finish_reason == "stop":
