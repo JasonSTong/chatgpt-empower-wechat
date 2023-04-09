@@ -37,6 +37,7 @@ MarkupSafe==2.1.2
 multidict==6.0.4
 openai==0.27.0
 opengraph-py3==0.71
+Pillow==9.5.0
 ping3==4.0.4
 polling==0.3.2
 priority==2.0.0
@@ -65,6 +66,7 @@ typing_extensions==4.4.0
 tzdata==2022.7
 tzlocal==4.2
 urllib3==1.26.14
+webuiapi==0.6.2
 wechaty==0.10.7
 wechaty-grpc==0.20.19
 wechaty-puppet==0.4.23
