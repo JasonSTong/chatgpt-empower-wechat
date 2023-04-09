@@ -6,7 +6,7 @@ from wechaty import WechatyPlugin, Wechaty, Contact, Room, Message
 from wechaty_puppet import get_logger
 
 from base import base_help_list
-from openai_.openai_default import text_ai
+from ai_.openai_default import text_ai
 from util.scheduler_ import schedulerTodoTask, removeTask, getTaskList
 
 log = get_logger(__name__)

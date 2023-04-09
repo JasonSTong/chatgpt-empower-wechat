@@ -6,5 +6,9 @@
   "qweather_api_key": "",
   "redis_url": "redis://localhost:6379/0",
   "root_user_uuid": [""],
-  "proxy": {"http": "", "https": ""}
+  "proxy": {"http": "", "https": ""},
+  "sd_ip": "127.0.0.1",
+  "sd_port": "7860",
+  "sd_models": {"name": "model_real_name [hash]"},
+  "sd_max_generate": 5
 }

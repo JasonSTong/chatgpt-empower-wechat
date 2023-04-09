@@ -74,3 +74,13 @@ base_help_list = []
 base_menu_list = []
 secondary_menu_list = []
 final_menu_list = []
+""" 初始化stable_diffusion 配置信息"""
+sd_ = "STABLE_DIFFUSION"
+sd_ip = collection_get(sd_, 'sd_ip')
+sd_port = int(collection_get(sd_, 'sd_port'))
+sd_max_generate = int(collection_get(sd_, 'sd_max_generate'))
+sd_max_generate_msg = collection_get(sd_, 'sd_max_generate_msg')
+sd_server_error_msg = collection_get(sd_, 'sd_server_error_msg')
+print(collection_get(sd_, 'sd_models'))
+print(collection_get(sd_, 'sd_models').__len__())
+sd_models = json.loads(collection_get(sd_, 'sd_models').replace("'", '"')) if collection_get(sd_, 'sd_models').__len__() > 4 else {}
