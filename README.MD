@@ -1,7 +1,7 @@
 # chatgpt-empower-wechat
 
 [![Powered by Wechaty](https://img.shields.io/badge/Powered%20By-Wechaty-brightgreen.svg)](https://github.com/Wechaty/wechaty)  [![pypi](https://img.shields.io/badge/py3.9-pass-brightgreen)](https://github.com/JasonSTong/chatgpt-empower-wechat)
-> 该项目使用chatgpt、wechaty-padlocal，可以快速搭建属于自己的微信机器人。
+> 该项目使用chatgpt、wechaty-padlocal，(支持stable diffusion)可以快速搭建属于自己的微信机器人。
 
 ## 更新
 
@@ -19,6 +19,7 @@
 - [x] 事件提醒
 - [x] 黑名单/限制名单管理
 - [x] 命令提示
+- [x] 支持stable diffusion(需要切换到sd分支拉取代码，配置文件参考config.json)
 - [ ] 接入tg机器人，进行双向绑定
 - [ ] 其他功能代开发
 
