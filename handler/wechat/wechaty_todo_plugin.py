@@ -7,7 +7,7 @@ from wechaty_puppet import get_logger
 
 from base import base_help_list
 from ai_.openai_default import text_ai
-from util.scheduler_ import schedulerTodoTask, removeTask, getTaskList
+from util.scheduler_ import schedulerTodoTask, removeTask, getTaskList, removeAll, schedulerTodoTaskV2
 
 log = get_logger(__name__)
 
@@ -15,7 +15,9 @@ log = get_logger(__name__)
 class WechatyTodoPoster(WechatyPlugin):
     def set_helper(self):
         base_help_list.append(
-            {"备忘录": [{"1.添加备忘录": "1.#提醒我+时间+事件\ne.g. #提醒我8点55上班打卡", "2.获取备忘录列表": "#任务列表", "3.删除备忘录": "#删除任务+id"}]})
+            {"备忘录": [
+                {"1.添加备忘录": "1.#提醒我+时间+事件\ne.g. #提醒我8点55上班打卡", "2.获取备忘录列表": "#任务列表",
+                 "3.删除备忘录": "#删除任务+id"}]})
 
     def __init__(self):
         super().__init__()
@@ -36,12 +38,13 @@ class WechatyTodoPoster(WechatyPlugin):
                     '(You:解析这句话中的时间地点日期事件"每天8点20提醒我打卡上班"，如果其中有时间则格式化时间为cron形式以"minute, hour, day of month, month, day of week"排序时间参数并且忽略秒，以["时间","事件"],其中引号需要变为双引号返回给我。例如:["0 18 * * *","打卡下班"])["20 8 * * *","打卡上班"](You:每天11点45提醒我准备吃饭)["45 11 * * *","准备吃饭"](You: ' + text + ')')
                 # index0:dict 时间,index1:地点
                 time_corn_and_todo: list = json.loads(
-                    response_text[0].replace("\n", "").replace("答案", "").replace("answer", "").replace("=", "").replace(
+                    response_text[0].replace("\n", "").replace("答案", "").replace("answer", "").replace("=",
+                                                                                                         "").replace(
                         "#：", "").replace("#:", "")
                 )
                 time_dict: str = time_corn_and_todo[0]
                 todo = time_corn_and_todo[1]
-                await schedulerTodoTask(conversation=conversation, timer=time_dict, args=[conversation, todo])
+                await schedulerTodoTaskV2(conversation=conversation, timer=time_dict, args=[todo])
             except Exception as e:
                 log.info(e)
                 if "already" not in e.__str__():
@@ -56,6 +59,9 @@ class WechatyTodoPoster(WechatyPlugin):
             else:
                 index_msg = msg.text().split('#删除')[1].replace(" ", "")
             await removeTask(conv_id, int(index_msg), conversation)
+
+        if "#" in text and ("清除全部任务" in text or "删除全部" in text or "清除全部"):
+            await removeAll(conv_id, conversation)
         if "#" in text and ("任务列表" in text or "任务列表" in text):
             task_str = "\n".join(getTaskList(conv_id))
             await conversation.say(task_str)

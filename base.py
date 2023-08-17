@@ -6,10 +6,14 @@ import random
 from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask.cli import load_dotenv
 from redis.client import Redis
 from telegram.ext import PicklePersistence, Application, CommandHandler
 
 import openai
+from wechaty import WechatyOptions, Wechaty
+
 from config.config import collection_get, get_env
 from config.generation_config import generation_config
 
@@ -37,7 +41,7 @@ redis_info_List = redis_url.replace("redis://", "").replace("/0", "").split(":")
 jobstores = {
     'default': RedisJobStore(host=redis_info_List[0], port=redis_info_List[1])
 }
-scheduler = AsyncIOScheduler(timezone='Asia/Shanghai')
+scheduler = AsyncIOScheduler(timezone='Asia/Shanghai',jobstores= jobstores)
 # scheduler.start()
 # scheduler.resume()
 """ 初始化tgBOT """
@@ -84,3 +88,11 @@ sd_server_error_msg = collection_get(sd_, 'sd_server_error_msg')
 print(collection_get(sd_, 'sd_models'))
 print(collection_get(sd_, 'sd_models').__len__())
 sd_models = json.loads(collection_get(sd_, 'sd_models').replace("'", '"')) if collection_get(sd_, 'sd_models').__len__() > 4 else {}
+"""
+Wechaty
+"""
+load_dotenv()
+options = WechatyOptions(
+    port=os.environ.get('port', 9001)
+)
+bot = Wechaty(options)
