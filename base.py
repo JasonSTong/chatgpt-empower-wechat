@@ -1,17 +1,13 @@
 import json
-import logging
 import os
-import random
+from mitmproxy import http
 
-from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask.cli import load_dotenv
 from redis.client import Redis
-from telegram.ext import PicklePersistence, Application, CommandHandler
+from telegram.ext import PicklePersistence, Application
 
-import openai
 from wechaty import WechatyOptions, Wechaty
 
 from config.config import collection_get, get_env

@@ -8,7 +8,7 @@ from wechaty_puppet import FileBox, get_logger, ContactQueryFilter
 from ai_.stable_diffusion import txt2img
 from base import redis, base_help_list, base_menu_list, secondary_menu_list, final_menu_list, root_user_uuid_list, \
     sd_max_generate_msg, sd_max_generate
-from ai_.openai_default import text_ai, img_ai, text_ai_v2, async_text_ai_v2
+from ai_.openai_default import text_ai, async_text_ai_v2, async_text_ai_gpt4
 
 log = get_logger(__name__)
 
@@ -52,6 +52,8 @@ class WechatAI(WechatyPlugin):
         if await self.pass_black_list(msg, is_room, mention_user, conversation):
             return
         if await self.helper(msg, is_room, mention_user, conversation):
+            return
+        if await self.check_to_gpt4(msg):
             return
         # 上下文存储在redis
         new_model_context_key = "new_model_context:"
@@ -138,7 +140,11 @@ class WechatAI(WechatyPlugin):
                 new_model_context = [json.loads(x) for x in new_model_context]
             new_model_context.append({"role": "user", "content": msg.text()})
             redis.rpush(new_model_context_key, json.dumps({"role": "user", "content": msg.text()}))
-            response_list = await async_text_ai_v2(new_model_context)
+            response_list = None
+            if redis.exists(msg.talker().get_id()+":gpt4"):
+                response_list = await async_text_ai_gpt4(new_model_context)
+            else:
+                response_list = await async_text_ai_v2(new_model_context)
             i = 1
             for response_text in response_list:
                 # 每次新的对话进来,增加过期时间
@@ -291,6 +297,19 @@ class WechatAI(WechatyPlugin):
 
     mode_dict = {"code-helper": "", "mao": "", "interviewer": ""}
 
+    async def check_to_gpt4(self,msg:Message):
+        if "#gpt4" in msg.text():
+            if redis.exists(msg.talker().get_id()+":gpt4"):
+                await msg.say("已是gpt4")
+                return True
+            redis.set(msg.talker().get_id()+":gpt4","true")
+            await msg.say("切换成功")
+            return True
+        if "#gpt3" in msg.text():
+            redis.delete(msg.talker().get_id()+":gpt4")
+            await msg.say("切换成功")
+            return True
+        return False
     # 旧模型使用
     # response_list = []
     # try:

@@ -1,8 +1,6 @@
-import logging
 import random
 
 import asyncio
-from typing import Awaitable
 
 import openai
 from wechaty_puppet import get_logger
@@ -11,7 +9,6 @@ from base import openai_key_list, openai_org, redis
 from util.uuid_util import getUUIDWithoutLine
 
 log = get_logger("openai_default")
-
 
 def create_openai():
     openai_key = openai_key_list[random.randint(0, len(openai_key_list) - 1)]
@@ -63,6 +60,39 @@ def text_ai_v2(message: list) -> set:
         response_text.add(text)
         if response.get('choices')[0].finish_reason == "stop":
             return response_text
+
+
+def text_ai(message: list, model: str):
+    response_text: set = set()
+    uuid = getUUIDWithoutLine()
+    log.info(f"uuid:{uuid}\n传入参数:{message}")
+    while True:
+        response = chat_completion_ai_api().create(model=model, messages=message, max_tokens=1024,
+                                                   n=1,
+                                                   stop=None,
+                                                   temperature=0, top_p=1)
+        text = response.get('choices')[0].message.content[:6].replace("\n", "") + response.get('choices')[
+                                                                                      0].message.content[6:]
+        log.info(f"uuid:{uuid}\nresponse:{text}")
+        response_text.add(text)
+        if response.get('choices')[0].finish_reason == "stop":
+            return response_text
+
+
+def text_ai_gpt4(message: list):
+    return text_ai(message, "gpt-4-32k")
+
+
+async def async_text_ai(message: list, model: str):
+    loop = asyncio.get_running_loop()
+    result = await loop.run_in_executor(None, text_ai, message, model)
+    return result
+
+
+async def async_text_ai_gpt4(message: list):
+    loop = asyncio.get_running_loop()
+    result = await loop.run_in_executor(None, text_ai_gpt4, message)
+    return result
 
 
 async def async_text_ai_v2(message: list) -> set:

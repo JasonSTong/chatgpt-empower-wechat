@@ -50,5 +50,7 @@ def generation_config():
         os.environ['http_proxy'] = config_dict.get('proxy').get('http')
     if config_dict.get('proxy') is not None and len(config_dict.get('proxy').get('https')) > 8:
         os.environ['https_proxy'] = config_dict.get('proxy').get('https')
+    if config_dict.get('Tpart') is not None:
+        os.environ['OPENAI_API_BASE'] = config_dict.get('Tpart')
     with open('cfg.ini', 'w') as configfile:
         config.write(configfile)

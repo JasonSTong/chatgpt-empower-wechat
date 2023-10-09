@@ -10,5 +10,6 @@
   "sd_ip": "127.0.0.1",
   "sd_port": "7860",
   "sd_models": {"name": "model_real_name [hash]"},
-  "sd_max_generate": 5
+  "sd_max_generate": 5,
+  "Tpart": ""
 }

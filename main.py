@@ -5,6 +5,7 @@ from flask.cli import load_dotenv
 from wechaty import Wechaty,  WechatyOptions
 
 from base import scheduler, bot
+from config.generation_config import config_dict
 from handler.wechat.wechat_ai import WechatAI
 from handler.wechat.wechaty_black_list_plugin import WechatyBlackListPlugin
 from handler.wechat.wechaty_todo_plugin import WechatyTodoPoster
